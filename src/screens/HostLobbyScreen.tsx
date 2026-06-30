@@ -1,0 +1,21 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Alert, Share } from 'react-native';
+import { GradientBackground } from '../components/GradientBackground';
+import { Card } from '../components/Card';
+import { PrimaryButton } from '../components/PrimaryButton';
+import { StatusPill } from '../components/StatusPill';
+import { colors } from '../theme/colors';
+import { LocalSignalingServer, SIGNAL_PORT } from '../services/LocalSignalingServer';
+import { sessionService } from '../services/SessionService';
+import { DiscoveryService } from '../services/DiscoveryService';
+import { NetworkInfoService } from '../services/NetworkInfoService';
+import { makeSessionCode } from '../utils/id';
+export const HostLobbyScreen = ({ go }: { go: (s: any) => void }) => {
+  const [ip, setIp] = useState('...'); const [code] = useState(makeSessionCode()); const [status, setStatus] = useState('starting');
+  useEffect(() => { const server = new LocalSignalingServer(); const discovery = new DiscoveryService();
+    (async () => { try { const localIp = await NetworkInfoService.getLocalIp(); setIp(localIp); sessionService.sessionCode = code; sessionService.hostIp = localIp; sessionService.bindTransport('host', server); sessionService.on('status', (s: string) => { setStatus(s); if (s === 'connected') go('chat'); }); sessionService.on('message', (m: any) => { if (m.type === 'hello' && m.sessionCode === code) sessionService.send('accepted', { ok: true }); }); await server.start(SIGNAL_PORT); await discovery.advertise(code, SIGNAL_PORT); setStatus('listening'); } catch (e: any) { setStatus('failed'); Alert.alert('Server error', String(e?.message || e)); } })();
+    return () => discovery.stop();
+  }, []);
+  return <GradientBackground><View style={styles.root}><Text style={styles.title}>Host Lobby</Text><Card><StatusPill status={status} /><Text style={styles.label}>Local IP</Text><Text style={styles.value}>{ip}:{SIGNAL_PORT}</Text><Text style={styles.label}>Session code</Text><Text style={styles.code}>{code}</Text><PrimaryButton title="Share connection info" onPress={() => Share.share({ message: `LAN Call Private\nHost: ${ip}:${SIGNAL_PORT}\nCode: ${code}` })} style={{ marginTop: 16 }} /><Text style={styles.note}>Keep this screen open until the Guest connects. Discovery broadcasts only when the Wi‑Fi network allows it.</Text></Card><PrimaryButton title="Cancel" variant="secondary" onPress={() => { sessionService.close(); go('role'); }} style={{ marginTop: 16 }} /></View></GradientBackground>;
+};
+const styles = StyleSheet.create({ root: { flex: 1, padding: 20, paddingTop: 56 }, title: { color: colors.text, fontSize: 28, fontWeight: '900', marginBottom: 18 }, label: { color: colors.muted, marginTop: 18 }, value: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: 4 }, code: { color: colors.cyan, fontSize: 42, fontWeight: '900', letterSpacing: 4 }, note: { color: colors.muted, lineHeight: 21, marginTop: 16 } });

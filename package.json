@@ -1,0 +1,36 @@
+{
+  "name": "lan-call-private",
+  "version": "1.0.0",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "prebuild:android": "expo prebuild --platform android --clean",
+    "doctor": "npx expo-doctor",
+    "build:preview": "npx eas-cli build --platform android --profile preview",
+    "build:development": "npx eas-cli build --platform android --profile development"
+  },
+  "dependencies": {
+    "@config-plugins/react-native-webrtc": "14.0.0",
+    "@react-native-community/netinfo": "12.0.1",
+    "expo": "~55.0.9",
+    "expo-dev-client": "~55.0.19",
+    "expo-linear-gradient": "~55.0.9",
+    "react": "19.2.0",
+    "react-native": "0.83.2",
+    "react-native-get-random-values": "~1.11.0",
+    "react-native-network-info": "^5.2.1",
+    "react-native-tcp-socket": "6.4.1",
+    "react-native-udp": "4.1.7",
+    "react-native-webrtc": "124.0.7"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.0",
+    "typescript": "~5.9.2"
+  },
+  "react-native": {
+    "net": "react-native-tcp-socket",
+    "dgram": "react-native-udp"
+  }
+}
