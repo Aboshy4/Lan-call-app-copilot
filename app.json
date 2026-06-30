@@ -5,9 +5,13 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
-    "platforms": ["android"],
+    "platforms": [
+      "android"
+    ],
     "scheme": "lancallprivate",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "package": "com.lancallprivate.app",
       "versionCode": 1,
@@ -21,7 +25,9 @@
         "RECORD_AUDIO",
         "MODIFY_AUDIO_SETTINGS"
       ],
-      "adaptiveIcon": { "backgroundColor": "#071427" }
+      "adaptiveIcon": {
+        "backgroundColor": "#071427"
+      }
     },
     "plugins": [
       "expo-dev-client",
@@ -32,6 +38,11 @@
           "microphonePermission": "LAN Call Private needs microphone access for local calls."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID_HERE"
+      }
+    }
   }
 }
