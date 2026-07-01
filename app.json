@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "LAN Call Private",
-    "slug": "lan-call-private",
+    "slug": "lan-app-call",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
